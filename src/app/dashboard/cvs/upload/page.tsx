@@ -29,6 +29,7 @@ import {
 import { createClient } from '@/lib/supabase/client';
 import { cn } from '@/lib/utils';
 import Link from "next/link";
+import { getApiUrl } from '@/lib/apiClient';
 
 export default function UploadCVPage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -42,6 +43,7 @@ export default function UploadCVPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelected = (file: File | undefined | null) => {
+
     if (file) {
       // Dosya tipi kontrolü
       const allowedTypes = [
@@ -128,6 +130,7 @@ export default function UploadCVPage() {
     setError(null);
     setSuccessMessage(null);
 
+    const apiUrl = getApiUrl();
     const progressInterval = simulateProgress();
 
     try {
@@ -139,7 +142,7 @@ export default function UploadCVPage() {
       const formData = new FormData();
       formData.append('file', selectedFile, selectedFile.name);
 
-      const response = await fetch('http://localhost:8000/api/v1/cv/upload', {
+      const response = await fetch(`${apiUrl}/api/v1/cv/upload`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${session.access_token}`,

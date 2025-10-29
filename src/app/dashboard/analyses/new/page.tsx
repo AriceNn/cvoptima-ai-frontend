@@ -26,6 +26,7 @@ import { AlertCircle, CheckCircle, Loader2, FileText, Briefcase, ArrowLeft, Spar
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { getApiUrl } from '@/lib/apiClient';
 
 interface CVSelectItem {
   id: string;
@@ -44,6 +45,7 @@ export default function NewAnalysisPage() {
   const [characterCount, setCharacterCount] = useState(0);
   const supabase = createClient();
   const router = useRouter();
+  const apiUrl = getApiUrl();
 
   const fetchAvailableCvs = useCallback(async () => {
     setIsLoadingCvs(true);
@@ -55,7 +57,7 @@ export default function NewAnalysisPage() {
         return; 
       }
       
-      const response = await fetch('http://localhost:8000/api/v1/cv', {
+      const response = await fetch(`${apiUrl}/api/v1/cv`, {
         headers: { 'Authorization': `Bearer ${session.access_token}` }
       });
       
@@ -115,7 +117,7 @@ export default function NewAnalysisPage() {
         throw new Error("Oturum bulunamadı."); 
       }
 
-      const response = await fetch('http://localhost:8000/api/v1/analysis/start', {
+      const response = await fetch(`${apiUrl}/api/v1/analysis/start`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

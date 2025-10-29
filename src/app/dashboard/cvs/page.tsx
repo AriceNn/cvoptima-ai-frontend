@@ -27,6 +27,7 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
+import { getApiUrl } from '@/lib/apiClient';
 
 // Tipler
 interface CVItem { 
@@ -68,6 +69,7 @@ export default function CVListPage() {
   
   const supabase = createClient();
   const router = useRouter();
+  const apiUrl = getApiUrl();
 
   useEffect(() => { 
     setClientReady(true); 
@@ -96,8 +98,8 @@ export default function CVListPage() {
         router.push('/login');
         return;
       }
-      
-      const response = await fetch('http://localhost:8000/api/v1/cv', {
+
+        const response = await fetch(`${apiUrl}/api/v1/cv`, {
         headers: { 'Authorization': `Bearer ${session.access_token}` }
       });
       
@@ -139,7 +141,7 @@ export default function CVListPage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error("Oturum bulunamadı");
       
-      const response = await fetch(`http://localhost:8000/api/v1/cv/${cvToDelete.id}`, {
+      const response = await fetch(`${apiUrl}/api/v1/cv/${cvToDelete.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${session.access_token}` }
       });
@@ -178,7 +180,7 @@ export default function CVListPage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error("Oturum bulunamadı");
       
-      const response = await fetch(`http://localhost:8000/api/v1/cv/${cvId}/download`, {
+      const response = await fetch(`${apiUrl}/api/v1/cv/${cvId}/download`, {
         headers: { 'Authorization': `Bearer ${session.access_token}` }
       });
       
@@ -213,7 +215,7 @@ export default function CVListPage() {
         throw new Error("Oturum bulunamadı.");
       }
       
-      const response = await fetch(`http://localhost:8000/api/v1/cv/${cvId}`, {
+      const response = await fetch(`${apiUrl}/api/v1/cv/${cvId}`, {
         headers: { 'Authorization': `Bearer ${session.access_token}` },
       });
       

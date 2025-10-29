@@ -18,6 +18,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { User as SupabaseUser } from '@supabase/supabase-js';
 import { cn } from '@/lib/utils';
+import { getApiUrl } from '@/lib/apiClient';
 
 interface CVItem {
   id: string;
@@ -66,12 +67,13 @@ export default function DashboardPage() {
       }
       
       setUser(session.user);
-
+      
+      const apiUrl = getApiUrl();
       const [cvResponse, analysisResponse] = await Promise.all([
-        fetch('http://localhost:8000/api/v1/cv', {
+        fetch(`${apiUrl}/api/v1/cv`, {
           headers: { 'Authorization': `Bearer ${session.access_token}` }
         }),
-        fetch('http://localhost:8000/api/v1/analysis', {
+        fetch(`${apiUrl}/api/v1/analysis`, {
           headers: { 'Authorization': `Bearer ${session.access_token}` }
         })
       ]);

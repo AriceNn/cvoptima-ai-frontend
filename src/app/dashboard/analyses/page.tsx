@@ -25,6 +25,8 @@ import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
+import { getApiUrl } from '@/lib/apiClient';
+
 
 interface AnalysisJobItem {
   id: string;
@@ -40,6 +42,7 @@ interface JobToDelete {
 }
 
 const POLLING_INTERVAL = 5000;
+const apiUrl = getApiUrl();
 
 export default function AnalysesListPage() {
   const [analyses, setAnalyses] = useState<AnalysisJobItem[]>([]);
@@ -92,7 +95,7 @@ export default function AnalysesListPage() {
         return; 
       }
       
-      const response = await fetch('http://localhost:8000/api/v1/analysis', {
+      const response = await fetch(`${apiUrl}/api/v1/analysis`, {
         headers: { 'Authorization': `Bearer ${session.access_token}` }
       });
       
@@ -168,7 +171,7 @@ export default function AnalysesListPage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error("Oturum bulunamadı");
       
-      const response = await fetch(`http://localhost:8000/api/v1/analysis/${jobToDelete.id}`, {
+      const response = await fetch(`${apiUrl}/api/v1/analysis/${jobToDelete.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${session.access_token}` }
       });
