@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
         // Gelen kaynak path: /dl/ ile başlayan her şey (tek bir parametre alır)
         source: '/dl/:path*', 
         // Hedef: Backend API adresimiz
-        destination: 'http://localhost:8000/dl/:path*', 
+        destination: 'https://cvoptima-api.onrender.com/dl/:path*', 
       },
     ]
   },
